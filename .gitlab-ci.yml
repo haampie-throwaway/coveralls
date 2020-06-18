@@ -4,7 +4,8 @@ build:
   image: registry.gitlab.com/cscs-ci/stellar-group/hpx_docker/hpx-base
   script: 
     - cp -r $CI_PROJECT_DIR /code
-    - cmake /code \
+    - |
+      cmake /code \
             -B /build \
             -G "Ninja" \
             -DCMAKE_BUILD_TYPE=Debug \
