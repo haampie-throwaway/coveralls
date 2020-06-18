@@ -16,9 +16,10 @@ build:
     - ctest
   after_script:
     - cd /build
-    - grcov . -s $CI_PROJECT_DIR -o $CI_PROJECT_DIR/coverage.json --llvm -t coveralls --token $COVERALLS_TOKEN --commit-sha $CI_COMMIT_SHA --service-name gitlab --service-job-id $CI_PIPELINE_ID --ignore-not-existing --prefix-dir /code --ignore "/*"
-    - curl -v -i -F json_file=@$CI_PROJECT_DIR/coverage.json https://coveralls.io/api/v1/jobs
+    - grcov . -s $CI_PROJECT_DIR -o $CI_PROJECT_DIR/coverage.json --llvm -t coveralls --token $COVERALLS_TOKEN --vcs-branch $CI_COMMIT_REF_NAME --commit-sha $CI_COMMIT_SHA --service-name gitlab-ci --service-job-id $CI_JOB_ID --ignore-not-existing --prefix-dir /code --ignore "/*"
+    - gzip -v $CI_PROJECT_DIR/coverage.json
+    - curl -v -i -F -H "Content-Encoding: gzip" json_file=@$CI_PROJECT_DIR/coverage.json.gz https://coveralls.io/api/v1/jobs
   artifacts:
     when: always
     paths:
-      - coverage.json
+      - coverage.json.gz
