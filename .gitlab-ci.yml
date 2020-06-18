@@ -16,7 +16,7 @@ build:
     - ctest
   after_script:
     - cd /build
-    - grcov . -s $CI_PROJECT_DIR -o $CI_PROJECT_DIR/coverage.json --llvm -t coveralls --token $COVERALLS_TOKEN --commit-sha $CI_COMMIT_SHA --service-name gitlab --service-job-id $CI_PIPELINE_ID
+    - grcov . -s $CI_PROJECT_DIR -o $CI_PROJECT_DIR/coverage.json --llvm -t coveralls --token $COVERALLS_TOKEN --commit-sha $CI_COMMIT_SHA --service-name gitlab --service-job-id $CI_PIPELINE_ID --ignore-not-existing --prefix-dir /code
     - curl -v -i -F json_file=@$CI_PROJECT_DIR/coverage.json https://coveralls.io/api/v1/jobs
   artifacts:
     when: always
