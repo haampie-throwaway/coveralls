@@ -1,0 +1,22 @@
+build:
+  tags:
+    - kubernetes
+  image: registry.gitlab.com/cscs-ci/stellar-group/hpx_docker/hpx-base
+  script: 
+    - cp -r $CI_PROJECT_DIR /code
+    - cmake /code \
+            -B /build \
+            -G "Ninja" \
+            -DCMAKE_BUILD_TYPE=Debug \
+            -DCMAKE_CXX_FLAGS="-O0 --coverage -fcolor-diagnostics" \
+            -DCMAKE_EXE_LINKER_FLAGS="--coverage" \
+            -DBUILD_TESTING=ON
+    - cd /build && ninja
+    - ctest
+  after_script:
+    - cd /build
+    - grcov . -s $CI_PROJECT_DIR -o $CI_PROJECT_DIR/coverage.json --llvm -t coveralls --token $COVERALLS_TOKEN
+  artifacts:
+    when: always
+    paths:
+      - coverage.json
