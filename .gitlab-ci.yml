@@ -17,7 +17,8 @@ build:
   after_script:
     - cd /build
     - grcov . -s /code -o $CI_PROJECT_DIR/coverage.json --llvm -t coveralls --service-name gitlab-ci --service-job-id $CI_JOB_ID --ignore-not-existing --prefix-dir /code --ignore "/*"
-    - cat $CI_PROJECT_DIR/coverage.json | jq '.+ {"commit_sha": "$CI_COMMIT_SHA"}' | jq 'del(.service_number)' | jq 'del(.service_pull_request)' | jq '+ {"git": {"head": {"id": "$CI_COMMIT_SHA", "message": "$CI_COMMIT_MESSAGE"}}}' > $CI_PROJECT_DIR/coverage.json
+    - |
+      cat $CI_PROJECT_DIR/coverage.json | jq '.+ {"commit_sha": "$CI_COMMIT_SHA"}' | jq 'del(.service_number)' | jq 'del(.service_pull_request)' | jq '+ {"git": {"head": {"id": "$CI_COMMIT_SHA", "message": "$CI_COMMIT_MESSAGE"}}}' > $CI_PROJECT_DIR/coverage.json
     - curl --form "json_file=@$CI_PROJECT_DIR/coverage.json" --include https://coveralls.io/api/v1/jobs
   artifacts:
     when: always
