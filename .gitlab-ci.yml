@@ -1,7 +1,7 @@
 build:
   tags:
     - kubernetes
-  image: registry.gitlab.com/cscs-ci/stellar-group/hpx_docker/hpx-base
+  image: registry.gitlab.com/cscs-ci/stellar-group/hpx_docker/hpx-base:jq
   script: 
     - cp -r $CI_PROJECT_DIR /code
     - |
