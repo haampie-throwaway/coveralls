@@ -19,7 +19,7 @@ build:
     - grcov . -s /code -o $CI_PROJECT_DIR/coverage.json --llvm -t coveralls --token $COVERALLS_TOKEN --ignore-not-existing --prefix-dir /code --ignore "/*"
     - cat $CI_PROJECT_DIR/coverage.json
     - |
-      cat $CI_PROJECT_DIR/coverage.json | jq -c '.+ {"commit_sha": env.CI_COMMIT_SHA}' | jq -c 'del(.service_number)' | jq -c 'del(.service_pull_request)' | jq -c '.+ {"git": {"head": {"id": env.CI_COMMIT_SHA, "message": env.CI_COMMIT_MESSAGE}}}' > $CI_PROJECT_DIR/coverage-2.json
+      cat $CI_PROJECT_DIR/coverage.json | jq -c '.+ {"commit_sha": env.CI_COMMIT_SHA} | del(.service_number) | del(.service_pull_request) | .+ {"git": {"branch": env.CI_COMMIT_BRANCH, "head": {"id": env.CI_COMMIT_SHA, "message": env.CI_COMMIT_MESSAGE}}}' > $CI_PROJECT_DIR/coverage-2.json
     - cat $CI_PROJECT_DIR/coverage-2.json
     - curl --form "json_file=@$CI_PROJECT_DIR/coverage-2.json" --include https://coveralls.io/api/v1/jobs
   artifacts:
